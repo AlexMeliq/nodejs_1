@@ -59,9 +59,13 @@
                     data: JSON.stringify(data),
                     contentType: 'application/json',
                     url: '/mail',
+                    beforeSend: function () {
+                        var toastContent = $('<span>Your mail will be send</span>');
+                        Materialize.toast(toastContent, 1000);
+                    },
                     success: function(data) {
-                        $('.flow-text').empty();
-                        $('h1 + p').html('Your mail will be send').before('<p class="flow-text">Thank You</p>');
+                        var toastContent = $('<span>Your mail was sent. Thank You!</span>');
+                        Materialize.toast(toastContent, 3000);
                         $('#emailS').find("input[type=email], textarea").val("");
                     }
                 });

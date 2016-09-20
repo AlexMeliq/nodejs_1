@@ -50,7 +50,10 @@ app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
+app.on('login', function (parent) {
+  console.log('Admin Mounted');
+  // console.log(parent); // refers to the parent app
+});
 
 app.use('*', function (req, res, next) {
   var cookie = req.cookies.logged;

@@ -34,7 +34,9 @@ router.get('/', function (req, res, next) {
 });
 router.post('/', function(req, res){
     console.log('body: ' + JSON.stringify(req.body));
-    res.send(req.body);
+    setTimeout(function () {
+        res.send(req.body);
+    }, 1000)
 });
 
 module.exports = router;
