@@ -1,0 +1,76 @@
+<% include header.ejs %>
+  <main>
+    <div class="row">
+      <div class="wrap">
+        <h1><%= locals.title %></h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="wrap">
+            <% if(locals.query == 'new'){ %>
+            <div class="col s8">
+              <form class="newPage" method="post" action="pages/new">
+                <% for (var field in locals.inputs){
+                  if (locals.inputs.hasOwnProperty(field)) {
+                    if(locals.inputs[field] != 'textarea'){ %>
+                      <div class="row">
+                        <div class="input-field col s12">
+                            <input class="validate" type="<%= locals.inputs[field] %>" name="<%= field %>" id="<%= field %>">
+                            <label for="<%= field %>"><%= field %></label>
+                        </div>
+                      </div>
+                    <% }else{ %>
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <textarea class="materialize-textarea" name="<%= field %>" id="<%= field %>" ></textarea>
+                        </div>
+                      </div>
+                    <% }
+                    }
+                  } %>
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="btn waves-effect waves-light waves-input-wrapper" style=""><input class="waves-button-input" type="submit" value="Publish"></i>
+              </div>
+            </div>
+
+              </form>
+            </div>
+              <% }else{ %>
+            <div class="col s12">
+              <div class="row">
+                <div class="input-field col s12">
+                  <a class="waves-effect waves-light btn" href="?new">Add New</a>
+                </div>
+              </div>
+              <table class="responsive-table striped">
+                <thead>
+                <tr>
+                  <th data-field="id">ID</th>
+                  <th data-field="title">Title</th>
+                  <th data-field="slug">Slug</th>
+                  <th data-field="author">Author</th>
+                  <th data-field="View Post"></th>
+                  <th data-field="Edit Post"></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <% for(var i = 0; i < locals.pages.length; i++) {%>
+                <tr>
+                  <td><%= locals.pages[i]._id %></td>
+                  <td><%= locals.pages[i].title %></td>
+                  <td><%= locals.pages[i].slug %></td>
+                  <td>...</td>
+                  <td><a target="_blank" href="/<%= locals.pages[i].slug %>">View Post</a></td>
+                  <td><a href="/<%= locals.pages[i].slug %>">{Edit Post}</a></td>
+                </tr>
+                <% } %>
+                </tbody>
+              </table>
+                <% } %>
+              </div>
+      </div>
+    </div>
+  </main>
+<% include footer.ejs %>

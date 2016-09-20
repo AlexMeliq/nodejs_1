@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+</head>
+<body>
+<% include templates/header.ejs %>
+<main>
+    <div class="row">
+        <div class="wrap">
+            <h1><%= title %></h1>
+            <p class="flow-text"><%= info %></p>
+        </div>
+        <div class="row">
+            <div class="wrap">
+                <form method="post" class="col s6" id="emailS" action="register">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input required id="email" type="email" class="validate" name="email">
+                            <label for="email">Email</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea required id="textarea1" class="materialize-textarea"></textarea>
+                            <label for="textarea1">Information</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input class="btn waves-effect waves-light" type="submit" value="Send">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    $(document).ready(function () {
+        $('#emailS').on({
+            submit: function (e) {
+                e.preventDefault();
+                var email = $('#email', this).val(),
+                    info = $('#textarea1', this).val(),
+                    data = {};
+                data.title = email;
+                data.message = info;
+                console.log(data);
+
+                $.ajax({
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    url: '/mail',
+                    success: function(data) {
+                        $('.flow-text').empty();
+                        $('h1 + p').html('Your mail will be send').before('<p class="flow-text">Thank You</p>');
+                        $('#emailS').find("input[type=email], textarea").val("");
+                    }
+                });
+            }
+        })
+    })
+</script>
+</body>
+</html>

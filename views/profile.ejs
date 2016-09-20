@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+</head>
+<body>
+<% include templates/header.ejs %>
+<main>
+    <div class="row">
+        <div class="wrap">
+            <h1><%= locals.title %></h1>
+            <p><%= locals.info %></p>
+        </div>
+        <div class="row">
+            <div class="wrap">
+                <% console.log(locals.user); %>
+                <form method="post" class="col s6" enctype="multipart/form-data" action="update">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input value="<%= locals.user.name %>" id="first_name" type="text" class="validate" name="name">
+                            <label for="first_name">First Name</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input value="<%= locals.user.surName %>" id="last_name" type="text" class="validate" name="surName">
+                            <label for="last_name">Last Name</label>
+                        </div>
+                    </div>
+                    <!--<div class="row">-->
+                        <!--<div class="input-field col s12">-->
+                            <!--<input  value="<%= /*locals.user.password*/ %>" id="password" type="password" class="validate"  name="password">-->
+                            <!--<label for="password">Password</label>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input value="<%= locals.user.email %>" disabled id="email"  type="email" class="validate" name="email">
+                            <label for="email">Email</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="file-field input-field col s12">
+                            <div class="btn">
+                                <span>File</span>
+                                <input type="file" name="avatar">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input  value="<%= locals.user.avatar %>" class="file-path validate" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input class="btn waves-effect waves-light" type="submit" value="Update">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

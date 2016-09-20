@@ -1,0 +1,16 @@
+<header>
+    <nav class="menu cl">
+        <ul>
+            <% for (var k in locals.menu){
+            if (locals.menu.hasOwnProperty(k)) { %>
+            <li><a href="<%= locals.menu[k]  %>"><%= k  %></a></li>
+            <%      }
+            }%>
+        </ul>
+        <% if(locals.currentUser){ %>
+        <div class="avatar" style="background-image: url('/uploads/<%= locals.currentUser.avatar %>') ">
+            <a href="#"></a>
+        </div>
+        <% } %>
+    </nav>
+</header>

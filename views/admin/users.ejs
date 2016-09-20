@@ -1,0 +1,35 @@
+<% include header.ejs %>
+<main>
+    <div class="row">
+        <div class="wrap">
+            <h1><%= title %></h1>
+            <p><%= info %></p>
+            <table class="responsive-table striped">
+                <thead>
+                <tr>
+                    <th data-field="id">ID</th>
+                    <th data-field="name">Name</th>
+                    <th data-field="surname">Surname</th>
+                    <th data-field="email">Email</th>
+                    <th data-field="email">Avatar</th>
+                    <th data-field="profile_link"></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <% for(var i = 0; i < users.length; i++) {%>
+                    <tr>
+                        <td><%= users[i]._id %></td>
+                        <td><%= users[i].name %></td>
+                        <td><%= users[i].surName %></td>
+                        <td><%= users[i].email %></td>
+                        <td><img style="width: 40px" src="/uploads/<%= users[i].avatar %> " /></td>
+                        <td><a href="/user/<%= users[i].name %>">Open Profile</a></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<% include footer.ejs %>

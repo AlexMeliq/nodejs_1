@@ -1,0 +1,32 @@
+{
+  "name": "starting",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "bcryptjs": "^0.7.12",
+    "body-parser": "~1.15.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "ejs": "~2.4.1",
+    "express": "~4.13.4",
+    "express-handlebars": "^1.1.0",
+    "express-session": "^1.8.2",
+    "less-middleware": "1.0.x",
+    "method-override": "^2.2.0",
+    "mongodb": "^2.2.9",
+    "morgan": "~1.7.0",
+    "multer": "^1.2.0",
+    "node-registry": "",
+    "orchestrate": "^0.3.11",
+    "passport": "^0.2.1",
+    "passport-facebook": "^1.0.3",
+    "passport-google": "^0.3.0",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.2",
+    "q": "^1.0.1",
+    "serve-favicon": "~2.3.0"
+  }
+}

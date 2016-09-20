@@ -1,0 +1,26 @@
+<header>
+
+    <ul id="slide-out" class="side-nav">
+        <li><div class="userView">
+                <img class="background" src="/admin/images/office.jpg">
+                <a href="/user/<%= locals.currentUser.name %>"><img class="circle" src="/uploads/<%= locals.currentUser.avatar %>"></a>
+                <a href="/user/<%= locals.currentUser.name %>"><span class="white-text name"><%= locals.currentUser.name %> <%= locals.currentUser.surName %></span></a>
+                <a target="_blank" href="mailto:<%= locals.currentUser.email %>"><span class="white-text email"><%= locals.currentUser.email %></span></a>
+            </div></li>
+        <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
+        <li><a href="#!">Second Link</a></li>
+        <li><div class="divider"></div></li>
+        <li><a class="subheader">Subheader</a></li>
+        <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+    </ul>
+    <nav class="menu cl">
+        <ul style="float: right;">
+            <% for (var k in locals.adminMenu){
+            if (locals.adminMenu.hasOwnProperty(k)) { %>
+            <li><a href="<%= locals.adminMenu[k]  %>"><%= k  %></a></li>
+            <%      }
+            }%>
+            <li><a href="#" data-activates="slide-out" class="collapse">Menu</a></li>
+        </ul>
+    </nav>
+</header>
