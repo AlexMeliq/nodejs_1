@@ -28,11 +28,22 @@ var admin = require('./routes/admin/admin');
 var pages = require('./routes/admin/pages');
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+//io handlers
+app.use(function(req, res, next){
+  res.io = io;
+  next();
+  // console.log(io);
+});
 
 
 
@@ -50,10 +61,6 @@ app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.on('login', function (parent) {
-  console.log('Admin Mounted');
-  // console.log(parent); // refers to the parent app
-});
 
 app.use('*', function (req, res, next) {
   var cookie = req.cookies.logged;
@@ -146,14 +153,16 @@ app.use('/admin/pages',pages);
 app.use('/admin/users', users);
 
 
+// error handlers
+
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
-
-// error handlers
 
 // development error handler
 // will print stacktrace
@@ -181,4 +190,7 @@ app.use(function(err, req, res, next) {
 
 
 
-module.exports = app;
+module.exports = {
+  app: app,
+  server: server
+};

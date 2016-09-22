@@ -22,14 +22,84 @@
         <div class="row">
             <div class="wrap">
                 <div class="chat">
-                    <input type="text" class="chat-name" placeholder="Enter your name">
-                    <div class="chat-messages"></div>
-                    <textarea class="chat-textarea materialize-textarea" placeholder="Type your messege"></textarea>
-                    <div class="chat-status">Status: <span>Idle</span></div>
+                    <input disabled type="text" class="chatName" value="<%= locals.currentUser.name %> <%= locals.currentUser.surName %>">
+                    <div class="chatMessages">
+                    <% for (var message in locals.messages) {
+                        var user = 'friend';
+                        if (locals.messages.hasOwnProperty(message)) {
+                            if(locals.messages[message].user_id.toString() == locals.currentUser._id.toString()){
+                                user = 'current';
+                            }
+//                            console.log(locals.messages[message]);
+                    %>
+                            <div  data-user="<%= user %>" class="chatMessage">
+                                <div class="who" data-user="<%= user %>">
+                                    <%- locals.messages[message].content %>
+                                </div>
+                            </div>
+                        <% }
+                    }%>
+                    </div>
+                    <textarea class="chatTextarea materialize-textarea" placeholder="Type your messege"></textarea>
                 </div>
             </div>
         </div>
     </div>
 </main>
 </body>
+<script>
+    var socket = io.connect();
+    socket.on('socketMessages', function (data) {
+        var content = $('.chatMessages');
+        content.empty();
+        for (var message in data){
+            var user = 'friend';
+            if (data.hasOwnProperty(message)) {
+                 if (data[message].user_id.toString() == "<%= locals.currentUser._id.toString(); %>") {
+                    user = 'current';
+                }
+//                console.log(data[message].content);
+                content.append('' +
+                        '<div class="chatMessage" data-user="' + user + '">' +
+                        '<div class="who" data-user="' + user + '">' +
+                        data[message].content +
+                        '</div>');
+                content.scrollTop(content[0].scrollHeight);
+            }
+        }
+//        socket.emit('my other event', { my: 'data' });
+    });
+    $(document).ready(function () {
+        $('.chatMessages').scrollTop($('.chatMessages')[0].scrollHeight);
+        $(document).on({
+            keypress: function (e) {
+                var cont = $('.chatTextarea'),
+                        text = cont.val();
+                if(e.charCode == 13){
+                    if(cont.is(':focus')){
+                        e.preventDefault();
+                        var data = {};
+                        data.text = text.replace(/\r\n|\n|\r/g, '<br />');;
+                        if(data.text.length) {
+                            $.ajax({
+                                type: 'POST',
+                                data: JSON.stringify(data),
+                                contentType: 'application/json',
+                                url: '/chat',
+                                beforeSend: function () {
+
+                                },
+                                success: function (data) {
+                                    cont.val('');
+                                }
+                            });
+                        }
+                    }
+                }else if(e.charCode == 10){
+                    cont.val(text + '\r\n');
+                }
+            }
+        })
+    })
+</script>
 </html>

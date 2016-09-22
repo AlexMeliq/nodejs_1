@@ -2,8 +2,7 @@ var express = require('express'),
     router = express.Router(),
     MongoClient = require('mongodb').MongoClient,
     assert = require('assert'),
-    url = 'mongodb://localhost:27017/test',
-    app = express();
+    url = 'mongodb://localhost:27017/test';
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
