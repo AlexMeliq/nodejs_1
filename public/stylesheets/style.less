@@ -45,32 +45,60 @@ nav{
   }
   .chatMessage{
     margin-bottom: 15px;
+    position: relative;
     &:after{
       content: '';
       display: block;
       clear: both;
     }
-    //&[data-user=current]+[data-user=current]{
-    //  margin-bottom: 1px;
-    //}
-    //&[data-user=friend]+[data-user=friend]{
-    //  margin-bottom: 1px;
-    //}
+    .avatar {
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 25px;
+      height: 25px;
+      background-size: cover;
+      a{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+      }
+    }
     .who {
       padding: 10px;
       border-radius: 10px;
+      p{
+        margin: 0;
+      }
+      iframe, img{
+        max-width: 100%;
+        height: auto;
+        border: 0;
+      }
+      a{
+        word-break: break-all;
+        text-decoration: underline;
+      }
       &[data-user=current]{
         color: #ffffff;
         background-color: #4080ff;
         float: right;
         max-width: 80%;
+        a {
+          color: white;
+        }
       }
       &[data-user=friend]{
         background-color: #f1f0f0;
         color: #4b4f56;
+        a {
+          color: #4080ff;
+        }
         float: left;
         display: table;
         max-width: 80%;
+        margin-left: 30px;
       }
     }
   }

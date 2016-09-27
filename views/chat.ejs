@@ -11,9 +11,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 </head>
 <body>
-<% include templates/header.ejs %>
+<% include templates/header.ejs  %>
 <main>
     <div class="row">
         <div class="wrap">
@@ -26,13 +27,18 @@
                     <div class="chatMessages">
                     <% for (var message in locals.messages) {
                         var user = 'friend';
-                        if (locals.messages.hasOwnProperty(message)) {
-                            if(locals.messages[message].user_id.toString() == locals.currentUser._id.toString()){
+                        if (locals.messages.hasOwnProperty(message) && locals.messages[message]) {
+                            if (locals.messages[message].user_id[0]._id.toString() == locals.currentUser._id.toString()) {
                                 user = 'current';
                             }
-//                            console.log(locals.messages[message]);
+                            //console.log(locals.messages[message]);
                     %>
                             <div  data-user="<%= user %>" class="chatMessage">
+                                <% if(user != 'current' &&  locals.messages[message]){ %>
+                                <div class="avatar" style="background-image: url('/uploads/<%= locals.messages[message].user_id[0].avatar %>') ">
+                                    <a href="user/<%= locals.messages[message].user_id[0].name %>"></a>
+                                </div>
+                                <% } %>
                                 <div class="who" data-user="<%= user %>">
                                     <%- locals.messages[message].content %>
                                 </div>
@@ -41,6 +47,7 @@
                     }%>
                     </div>
                     <textarea class="chatTextarea materialize-textarea" placeholder="Type your messege"></textarea>
+                    <a id="x" class="waves-effect waves-light btn">Send</a>
                 </div>
             </div>
         </div>
@@ -54,27 +61,55 @@
         content.empty();
         for (var message in data){
             var user = 'friend';
-            if (data.hasOwnProperty(message)) {
-                 if (data[message].user_id.toString() == "<%= locals.currentUser._id.toString(); %>") {
+            var avatar = '';
+            if (data.hasOwnProperty(message) && data[message]) {
+                 if (data[message].user_id[0]._id.toString() == "<%= locals.currentUser._id.toString(); %>") {
                     user = 'current';
-                }
-//                console.log(data[message].content);
+                }else{
+                    var avUl = '/uploads/'+ data[message].user_id[0].avatar,
+                        avLi = '/user/' +data[message].user_id[0].name;
+                    avatar = '<div class="avatar" style="background-image: url(' + avUl + ') ">' +
+                            '<a href="' + avLi + '"></a>' +
+                            '</div>';
+                 }
+
                 content.append('' +
                         '<div class="chatMessage" data-user="' + user + '">' +
+                        avatar +
                         '<div class="who" data-user="' + user + '">' +
                         data[message].content +
                         '</div>');
                 content.scrollTop(content[0].scrollHeight);
             }
         }
-//        socket.emit('my other event', { my: 'data' });
     });
     $(document).ready(function () {
+        tinymce.init(
+                {
+                    selector:'.chatTextarea',
+                    height: 200,
+                    theme: 'modern',
+                    plugins: [
+                        'autolink lists link image',
+                        'wordcount',
+                        'media',
+                        'emoticons textcolor colorpicker textpattern imagetools'
+                    ],
+                    toolbar1: 'bold italic media | backcolor emoticons',
+                    toolbar2: '',
+                    menubar:false,
+                    statusbar:false,
+                    image_advtab: true,
+                    content_css: [
+                        '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                        '//www.tinymce.com/css/codepen.min.css'
+                    ]
+                });
         $('.chatMessages').scrollTop($('.chatMessages')[0].scrollHeight);
         $(document).on({
             keypress: function (e) {
                 var cont = $('.chatTextarea'),
-                        text = cont.val();
+                        text = tinyMCE.activeEditor.getContent();
                 if(e.charCode == 13){
                     if(cont.is(':focus')){
                         e.preventDefault();
@@ -91,12 +126,36 @@
                                 },
                                 success: function (data) {
                                     cont.val('');
+                                    tinyMCE.activeEditor.setContent('');
                                 }
                             });
                         }
                     }
                 }else if(e.charCode == 10){
                     cont.val(text + '\r\n');
+                }
+            }
+        });
+        $('#x').on({
+            click: function () {
+                var cont = $('.chatTextarea'),
+                        text = tinyMCE.activeEditor.getContent();
+                var data = {};
+                data.text = text.replace(/\r\n|\n|\r/g, '<br />');;
+                if(data.text.length) {
+                    $.ajax({
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        url: '/chat',
+                        beforeSend: function () {
+
+                        },
+                        success: function (data) {
+                            cont.val('');
+                            tinyMCE.activeEditor.setContent('');
+                        }
+                    });
                 }
             }
         })
